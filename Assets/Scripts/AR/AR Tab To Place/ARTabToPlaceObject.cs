@@ -6,18 +6,18 @@ using UnityEngine.XR.ARSubsystems;
 
 
 [RequireComponent(typeof(ARRaycastManager))]
-public class ARTabToPlaceObject : MonoBehaviour
+public abstract class ARTabToPlaceObject : MonoBehaviour
 {
     /*------->>> Parameters <<<-------*/
     #region Parameters
     [Header("References")]
-    [SerializeField] private GameObject gameObjectToInstantiate;
+    [SerializeField] protected GameObject gameObjectToInstantiate;
 
-    private GameObject _spawnedObject;
-    private ARRaycastManager _arRaycastManager;
-    private Vector2 _touchPosition;
+    protected GameObject _spawnedObject;
+    protected ARRaycastManager _arRaycastManager;
+    protected Vector2 _touchPosition;
 
-    static List<ARRaycastHit> hits = new List<ARRaycastHit>();
+    protected static List<ARRaycastHit> hits = new List<ARRaycastHit>();
     #endregion
 
 
@@ -29,12 +29,12 @@ public class ARTabToPlaceObject : MonoBehaviour
 
     /*------->>> Unity methods <<<-------*/
     #region Unity methods
-    private void Awake()
+    protected void Awake()
     {
         _arRaycastManager = GetComponent<ARRaycastManager>();
     }
 
-    private void Update()
+    protected void Update()
     {
         if (!TryGetTouchPosition(out Vector2 touchPosition))
         {
@@ -43,18 +43,16 @@ public class ARTabToPlaceObject : MonoBehaviour
 
         if (PhysicRayCastBlockedByUI(touchPosition))
         {
-            Pose hitPose = hits[0].pose;
-            if (_spawnedObject == null)
-            {
-                _spawnedObject = Instantiate(gameObjectToInstantiate, hitPose.position, hitPose.rotation);
-            }
-            else
-            {
-                _spawnedObject.transform.position = hitPose.position;
-            }
+            PlaceObject();
             OnObjectPlaced?.Invoke();
         }
     }
+    #endregion
+
+
+    /*------->>> Placing methods <<<-------*/
+    #region Placing methods
+    protected abstract void PlaceObject();
     #endregion
 
 

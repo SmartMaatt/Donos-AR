@@ -1,26 +1,52 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TheBossController : MonoBehaviour
 {
-    [SerializeField] float waitTime;
-    [SerializeField] float walkTime;
-    [SerializeField] float walkDistance;
-    [SerializeField] Vector3 testEndPoint;
-    [SerializeField] Transform lookAtObject;
+    /*------->>> Parameters <<<-------*/
+    #region Parameters
+    [Header("References")]
+    [SerializeField] private Transform lookAtObject;
 
-    Animator animator;
+    [Header("Settings")]
+    [SerializeField] private float waitTime;
+    [SerializeField] private float walkTime;
+    [SerializeField] private float walkDistance;
 
-    void Start()
+    [Space]
+    [SerializeField] private Vector3 testEndPoint;
+
+    private Animator _animator;
+    private IEnumerator _lerpProcedure;
+    #endregion
+
+
+    /*------->>> Getters/Setters <<<-------*/
+    #region Getters/Setters
+    public Transform LookAtObject { get => lookAtObject; set => lookAtObject = value; }
+    #endregion
+
+
+    /*------->>> Unity methods <<<-------*/
+    #region Unity methods
+    private void Start()
     {
-        SpawnTheBoss(testEndPoint);
+        _animator = GetComponent<Animator>();
+        _animator.SetBool("Stop", true);
+    }
+    #endregion
+
+
+    /*------->>> Positioning methods <<<-------*/
+    #region Positioning methods
+    [ContextMenu("Use test end point")]
+    public void UseTestEndPoint()
+    {
+        SetDestinationPoint(testEndPoint);
     }
 
-    void SpawnTheBoss(Vector3 endPoint)
+    public void SetDestinationPoint(Vector3 endPoint)
     {
-        animator = GetComponent<Animator>();
-
         transform.position = endPoint;
 
         Vector3 lookPos = lookAtObject.position - transform.position;
@@ -30,16 +56,19 @@ public class TheBossController : MonoBehaviour
 
         transform.position += rotation * Vector3.back * walkDistance;
 
-        StartCoroutine(LerpPosition(endPoint, walkTime));
+        // Lerp coroutine
+        if (_lerpProcedure != null) { StopCoroutine(_lerpProcedure); }
+        _lerpProcedure = LerpPosition(endPoint, walkTime);
+        StartCoroutine(_lerpProcedure);
     }
 
-    IEnumerator LerpPosition(Vector3 targetPosition, float duration)
+    private IEnumerator LerpPosition(Vector3 targetPosition, float duration)
     {
-        animator.SetBool("Stop", true);
+        _animator.SetBool("Stop", true);
 
         yield return new WaitForSeconds(waitTime);
 
-        animator.SetBool("Stop", false);
+        _animator.SetBool("Stop", false);
 
         float time = 0;
         Vector3 startPosition = transform.position;
@@ -51,6 +80,7 @@ public class TheBossController : MonoBehaviour
             yield return null;
         }
 
-        animator.SetBool("Stop", true);
+        _animator.SetBool("Stop", true);
     }
+    #endregion
 }
