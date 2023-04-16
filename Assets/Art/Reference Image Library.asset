@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
+  m_Name: Reference Image Library
+  m_EditorClassIdentifier: 
+  m_GuidLow: 4734529659744406632
+  m_GuidHigh: 17734973399828759187
+  m_DataStore:
+    m_Storage: []
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 4718247457306282307
+      m_GuidHigh: 16516383264273134266
+    m_SerializedTextureGuid:
+      m_GuidLow: 9724537354088497870
+      m_GuidHigh: 18027176331540604987
+    m_Size: {x: 0.3, y: 0.29575002}
+    m_SpecifySize: 1
+    m_Name: Smoking Sign
+    m_Texture: {fileID: 0}
